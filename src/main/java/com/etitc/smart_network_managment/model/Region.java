@@ -6,13 +6,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
-@Table(name = "ciudades")
-@Setter
+@Table(name = "regiones")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Ciudad {
+public class Region {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,14 +22,12 @@ public class Ciudad {
     @Column(nullable = false, unique = true)
     private String nombre;
 
-    @Column
-    private String pais;
-
-    @Column
-    private Integer poblacion;
-
-    // Una ciudad pertenece a una region
+    // Una region que sea el padre
     @ManyToOne
-    @JoinColumn(name = "region_id")
-    private Region region;
+    @JoinColumn(name = "padre_id")
+    private Region padre;
+
+    // Lista de subregiones que dependen del padre
+    @OneToMany(mappedBy = "padre", fetch = FetchType.EAGER)
+    private List<Region> hijos;
 }
